@@ -54,3 +54,12 @@ def generate_grid():
             for z in range(GRID_SIZE):
                 points.append((x * CELL_SIZE - offset, y * CELL_SIZE - offset, z * CELL_SIZE - offset))
     return points
+
+def rotate_y_90(points):
+    rotated_points = []
+    for x, y, z in points:
+        new_x = z
+        new_y = -x
+        new_z = y
+        rotated_points.append((new_x, new_y, new_z))
+    return rotated_points

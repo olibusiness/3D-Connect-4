@@ -15,7 +15,7 @@ def check_win(board):
                     if board[layer][row][col] != first_val:
                         break  # Exit the loop if a mismatch is found
                 else:  
-                    return f"Winner found in layer {layer}, row {row}"
+                    return True # f"Winner found in layer {layer}, row {row}"
 
     # Checks all col
     for layer in range(4):
@@ -26,7 +26,7 @@ def check_win(board):
                     if board[layer][row][col] != first_val:
                         break  # Exit the loop if a mismatch is found
                 else:  
-                    return f"Winner found in layer {layer}, col {col}"
+                    return True # Winner found in layer {layer}, col {col}
     # vertical check 
     for row in range(4):
         for col in range(4):
@@ -37,7 +37,7 @@ def check_win(board):
                         break  # Exit the loop if a mismatch is found
                 else:  
                     # This else runs only if the 'for' loop completes without 'break'
-                    return f"Vertical Winner found in row {row}, col {col}"
+                    return True # Vertical Winner found in row {row}, col {col}
     
     # check basic diagonal in each layer 
     for layer in range(4):
@@ -47,7 +47,7 @@ def check_win(board):
                 if board[layer][i][i] != first_val:
                     break
             else:
-                return f"Diagonal Winner found in layer {layer}"
+                return True # Diagonal Winner found in layer {layer}
 
     # Check diagonal other direction in each layer 
     for layer in range(4):
@@ -57,7 +57,7 @@ def check_win(board):
                 if board[layer][i][3-i] != first_val:
                     break
             else:
-                return f"Diagonal Winner found in layer {layer}"
+                return True # Diagonal Winner found in layer {layer}
             
     # Check for diagonals across layers
     for row in range(4):
@@ -67,7 +67,7 @@ def check_win(board):
                 if board[layer_col][row][layer_col] != first_val:
                     break
             else:
-                return f"3D Diagonal Winner found along row {row} and layers"
+                return True # 3D Diagonal Winner found along row {row} and layers
             
     # Check for diagonals across layers in the other direction
     for row in range(4):
@@ -77,7 +77,7 @@ def check_win(board):
                 if board[layer_col][row][3 - layer_col] != first_val:
                     break
             else:
-                return f"3D Diagonal Winner found along row {row} in reverse direction"
+                return True # 3D Diagonal Winner found along row {row} in reverse direction
     
     # from [0][0][0] to [3][3][3]
     first_val = board[0][0][0]
@@ -86,7 +86,7 @@ def check_win(board):
             if board[part][part][part] != first_val:
                 break
         else: 
-            return "3D Diagonal done the middle"
+            return True # 3D Diagonal done the middle
 
     # from [0][0][3] to [3][3][0]
     first_val = board[0][0][3]
@@ -95,7 +95,7 @@ def check_win(board):
             if board[part][part][3 - part] != first_val:
                 break
         else: 
-            return "3D Diagonal done in the other direction"
+            return True # 3D Diagonal done in the other direction
     
     # from [0][3][0] to [3][0][3]
     first_val = board[0][3][0]
@@ -104,7 +104,7 @@ def check_win(board):
             if board[part][3-part][part] != first_val:
                 break
         else:
-            return "3D Diagonal done the middle"
+            return  True #3D Diagonal done the middle
 
     # from [0][0][3] to [3][3][0]
     first_val = board[0][0][3]  # Initialize once
@@ -113,7 +113,7 @@ def check_win(board):
             if board[part][part][3 - part] != first_val:
                 break
         else:  # Executes only if no break occurs in the loop
-            return "3D Diagonal from [0][0][3] to [3][3][0] is done"
+            return True #3D Diagonal from [0][0][3] to [3][3][0] is done
         
     return False  # No winner found
 
@@ -123,11 +123,9 @@ def check_win(board):
 # player turns white starts first black after 
 def who_move(num_turn):
     if num_turn % 2 == 0:
-        return "White"
+        return True
     else:
-        return "Brown"
-
-num_turn = 7
+        return False
 # print(who_move(num_turn)) #keep track of how many moves that returns whos move it is
 
 
@@ -145,4 +143,4 @@ def legal_move(board, move):
             return "Can't move there"
 
 
-print(legal_move(board, [0, 0, 0]))
+# print(legal_move(board, [0, 0, 0]))
