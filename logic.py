@@ -130,17 +130,16 @@ def who_move(num_turn):
 
 
 # what change they want to the board 
-def legal_move(board, move):
+def legal_move(board, layer, row, col):
 
-    layer, row, col = move  # Unpack the move coordinates
     for n in range (layer):
         if board[n][row][col] == 0:
-            return "Can't move there"
+            return False # "Can't move there"
     else:
         if board[layer][row][col] == 0:
-            return "Legit move"
+            return True # "Legit move"
         else:
-            return "Can't move there"
+            return False # Can't move there"
 
 
 # print(legal_move(board, [0, 0, 0]))
