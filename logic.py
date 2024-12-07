@@ -1,4 +1,4 @@
-from grid import board
+# from grid import board
 import grid
 
 # board[1][0][2] = 6
@@ -141,5 +141,55 @@ def legal_move(board, layer, row, col):
         else:
             return False # Can't move there"
 
+def get_all_lines(board):
 
+    # Generate all possible lines (rows, columns, diagonals) in the 3D board.
+    
+    lines = []
+
+    # Horizontal lines (rows) in each layer
+    for layer in range(4):
+        for row in range(4):
+            lines.append([board[layer][row][col] for col in range(4)])
+
+    # Vertical lines (columns) in each layer
+    for layer in range(4):
+        for col in range(4):
+            lines.append([board[layer][row][col] for row in range(4)])
+
+    # Diagonal lines in each layer
+    for layer in range(4):
+        lines.append([board[layer][i][i] for i in range(4)])
+        lines.append([board[layer][i][3 - i] for i in range(4)])
+
+    # Vertical lines across layers
+    for row in range(4):
+        for col in range(4):
+            lines.append([board[layer][row][col] for layer in range(4)])
+
+    # 3D diagonals
+    lines.append([board[i][i][i] for i in range(4)])
+    lines.append([board[i][i][3 - i] for i in range(4)])
+    lines.append([board[i][3 - i][i] for i in range(4)])
+    lines.append([board[i][3 - i][3 - i] for i in range(4)])
+
+    return lines
+
+def is_winning_line(lines):
+    # not correctly checking diagonals on what up from not a corrner ==========================
+    for line in lines:
+        first_val = line[0]
+        if first_val != 0:  
+            all_match = True  # Assume the line is a winning line
+            for val in line:
+                if val != first_val:
+                    all_match = False  # If value not match it's not a winning line
+                    break  # Exit the loop cuz not winner
+            if all_match:  # If all values match
+                return True
+    return False  # No winning line found  
+
+# lines = ((get_all_lines(board)))
+
+# print(is_winning_line(lines))
 # print(legal_move(board, [0, 0, 0]))

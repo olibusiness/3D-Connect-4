@@ -88,11 +88,11 @@ def main():
                 if playXButton.collidepoint(mouse):
                     time.sleep(0.2)
                     user = True # single player
-                    print(user)
+                    # print(user)
                 elif playOButton.collidepoint(mouse):
                     time.sleep(0.2)
                     user = False # Two player
-                    print(user)
+                    # print(user)
         
         else:
 
@@ -144,7 +144,9 @@ def main():
                                 TURN += 1
                                 colors[i] = ORANGE  # Change color to orange for player 1
                                 grid.update_grid(logical_grid, layer, row, col, 1)
-                                if logic.check_win(logical_grid):
+                                lines = logic.get_all_lines(logical_grid)
+
+                                if logic.is_winning_line(lines):
                                     print("Winner White")
                                     running = False
                             else:

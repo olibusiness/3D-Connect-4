@@ -4,10 +4,10 @@ def create_rest_grid():
     board = [[[0 for col in range(4)] for col in range(4)] for row in range(4)]
     
     # layer, row, column
-    # board[0][0][0] = 5  # Separate layers for readability
-    # board[1][1][1] = 5 
-    # board[2][0][2] = 5 
-    # board[3][3][3] = 5 
+    # board[0][0][0] = 1  # Separate layers for readability
+    # board[0][1][0] = 1 
+    # board[0][2][0] = 1 
+    # board[0][3][0] = 1 
     return board
 
 def grid_status(grid):
@@ -25,9 +25,8 @@ def grid_status(grid):
         
 
 def update_grid(grid, layer, row, col, value):
-    """
-    Updates the grid at the specified layer, row, and column with the given value.
-    """
+    # Updates the grid at the specified layer, row, and column with the given value.
+    
     grid[layer][row][col] = value
     
 
