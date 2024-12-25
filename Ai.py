@@ -111,5 +111,5 @@ def undo_move(board, layer, row, col):
     board[layer][row][col] = 0  # Reset to empty
 
 
-score, move = minimax(board,3,True, -math.inf, math.inf)
-print(f"Best Move: {move}, Score: {score}")
+# score, move = minimax(board,3,True, -math.inf, math.inf)
+# print(f"Best Move: {move[2]}, Score: {score}")

@@ -11,7 +11,7 @@ WIDTH, HEIGHT = 800, 600
 
 # Grid settings
 GRID_SIZE = 4
-CELL_SIZE = 50  # Distance between points
+CELL_SIZE = 80  # Distance between points
 SPHERE_RADIUS = 20
 
 # Projection settings
