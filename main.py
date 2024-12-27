@@ -5,6 +5,7 @@ import logic
 import time
 import Ai
 import math
+import time
 
 pygame.init()
 
@@ -30,12 +31,13 @@ SPHERE_RADIUS = 20
 
 def loss(status):
     while True:  # Display the loss screen until an action is taken
+
         screen.fill(BLACK)
 
         title_text = largeFont.render(status, True, white)
         title_rect = title_text.get_rect(center=(Width / 2, Height / 3))  # Center title vertically at 1/3 of the height
         screen.blit(title_text, title_rect)
-
+        
         # draw the Restart button at the center of the screen
         button_width, button_height = Width / 4, 50
         restart_button = pygame.Rect((Width - button_width) / 2, (Height - button_height) / 2, button_width, button_height)
@@ -81,6 +83,12 @@ def main():
                     index += 1
 
         running = True
+        dragging = False  # To track if the left mouse button is held down
+        last_mouse_pos = None
+        click_start_time = 0
+        CLICK_THRESHOLD = 0.2 
+        clicked = False
+
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -90,6 +98,32 @@ def main():
                     if event.key == pygame.K_ESCAPE:
                         pygame.quit()
                         exit()  # Exit the program
+
+                # control camera with mouse 
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:  # Left mouse button
+                        dragging = True
+                        
+                        click_start_time = time.time()
+                        last_mouse_pos = pygame.mouse.get_pos()  # Save the initial mouse position
+
+                elif event.type == pygame.MOUSEMOTION:
+                    if dragging:  # Rotate the board only when dragging
+                        current_mouse_pos = pygame.mouse.get_pos()
+                        dx = current_mouse_pos[0] - last_mouse_pos[0]
+                        dy = current_mouse_pos[1] - last_mouse_pos[1]
+                        angle_y += dx * 0.005  # Adjust rotation speed for X-axis movement
+                        angle_x += dy * 0.005  # Adjust rotation speed for Y-axis movement
+                        last_mouse_pos = current_mouse_pos
+
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    if event.button == 1:
+                        dragging = False
+                        click_duration = time.time() - click_start_time
+                        click_start_time = 0  # Reset click start time
+
+                        if click_duration < CLICK_THRESHOLD:
+                            clicked = True
 
             # Start screen logic
             if user is None: 
@@ -143,6 +177,19 @@ def main():
                 rotated_points = [graphics.rotate_x(graphics.rotate_y(point, angle_y), angle_x) for point in points]
                 projected_points = [graphics.project(point) for point in rotated_points]
 
+                 # Display Turn Indicator
+                if user is False:  # Two-player mode
+                    turn_text = f"Player 1 (Yellow)" if logic.who_move(TURN) else "Player 2 (Brown)"
+                else:  # Single-player mode
+                    turn_text = "" if logic.who_move(TURN) else "AI's Turn"
+
+                # Render and display the turn text
+                turn_surface = mediumFont.render(turn_text, True, white)
+                turn_rect = turn_surface.get_rect()
+                turn_rect.topleft = (10, Height - 40)  # Bottom-left corner
+                screen.blit(turn_surface, turn_rect)
+
+
                 for i, p in enumerate(projected_points):
                     layer, row, col = point_to_grid_map[i]
                     sphere_surface = pygame.Surface((SPHERE_RADIUS * 2, SPHERE_RADIUS * 2), pygame.SRCALPHA)
@@ -156,7 +203,8 @@ def main():
                     pygame.draw.circle(sphere_surface, color, (SPHERE_RADIUS, SPHERE_RADIUS), SPHERE_RADIUS)
                     screen.blit(sphere_surface, (p[0] - SPHERE_RADIUS, p[1] - SPHERE_RADIUS))
 
-                if pygame.mouse.get_pressed()[0]:  # Left-click detected
+                if clicked and not dragging:  # Left-click detected
+                    clicked = False
                     mouse_x, mouse_y = pygame.mouse.get_pos()
                     min_distance = float('inf')
                     closest_sphere = None
@@ -179,7 +227,7 @@ def main():
                                     TURN += 1
 
                                     if logic.check_win(logical_grid):
-                                        if loss("Player 1 (Orange) wins!"):
+                                        if loss("Player 1 (Yellow) wins!"):
                                             break  # Restart game loop
                                 else:  # Player 2's turn
                                     colors[closest_sphere] = BROWN
